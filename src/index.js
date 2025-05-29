@@ -39,7 +39,7 @@ const swaggerOptions = {
     },
     security: [{ bearerAuth: [] }],
   },
-  apis: ["./routes/*.js"], // authRoutes faylida yozamiz
+  apis: ["./src/routes/*.js"], // authRoutes faylida yozamiz
 };
 
 const swaggerDocs = swaggerJsdoc(swaggerOptions);
