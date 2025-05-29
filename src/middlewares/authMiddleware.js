@@ -1,22 +1,28 @@
 const jwt = require("jsonwebtoken");
 
-const verifyToken = (req, res, next) => {
-    console.log("verifyToken middleware called");
-    const authHeader = req.headers.authorization;
+const authMiddleware = async (req, res, next) => {
+  // Authorization sarlavhasidan tokenni olish
+  const authHeader = req.header("Authorization");
+  if (!authHeader) {
+    return res.status(401).json({ message: "Token taqdim etilmagan" });
+  }
 
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-        return res.status(401).json({ message: "No token provided" });
-    }
+  // Token "Bearer " bilan boshlanishini tekshirish
+  if (!authHeader.startsWith("Bearer ")) {
+    return res.status(401).json({ message: "Token formati noto‘g‘ri" });
+  }
 
-    const token = authHeader.split(" ")[1];
+  // Tokenni ajratib olish
+  const token = authHeader.replace("Bearer ", "");
 
-    try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        req.user = decoded; // foydalanuvchi ma'lumotlarini requestga qo‘shamiz
-        next();
-    } catch (error) {
-        return res.status(401).json({ message: "Invalid or expired token" });
-    }
+  try {
+    // Tokenni tekshirish
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = decoded; // Dekodlangan foydalanuvchi ma'lumotlarini (_id, email, username) so‘rovga qo‘shish
+    next(); // Keyingi middleware yoki marshrut ishlovchisiga o‘tish
+  } catch (e) {
+    return res.status(401).json({ message: "Token noto‘g‘ri yoki muddati o‘tgan" });
+  }
 };
 
-module.exports = verifyToken;
+module.exports = authMiddleware;
