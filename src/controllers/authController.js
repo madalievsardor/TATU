@@ -22,7 +22,7 @@ const register = async (req, res) => {
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        const newUser = new userModel({
+        const newUser = new  ({
             firstName,
             lastName,
             email,
