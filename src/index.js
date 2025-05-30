@@ -27,6 +27,9 @@ const swaggerOptions = {
       {
         url: "https://tatu-b5ew.onrender.com", // render URL
       },
+      {
+        url: "http://localhost:8000", // lokal server
+      }
     ],
     components: {
       securitySchemes: {
